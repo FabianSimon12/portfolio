@@ -1,0 +1,86 @@
+{% extends "_layout.html" %}
+{% set page = "work" %}
+
+{% block title %}Work · Arefeh{% endblock %}
+
+{% block content %}
+<section class="work work--page js-fade" aria-label="Selected work">
+  <div class="container">
+    <div class="xp-head js-fade">
+      <div class="bigtype bigtype--tight">SELECTED</div>
+      <div class="bigtype bigtype--tight">WORK</div>
+    </div>
+
+
+    <div class="grid js-fade">
+      {% for cs in case_studies %}
+        <article class="work-card">
+          <div class="work-card__meta">
+            <div class="pill">{{ cs.year }}</div>
+            <div class="pill pill--ghost">{{ cs.role }}</div>
+            {% if cs.status and cs.status != "Public" %}
+              <div class="pill pill--warn">{{ cs.status }}</div>
+            {% endif %}
+          </div>
+
+          <h3 class="work-card__title">
+            <a href="/{{ cs.slug }}/">{{ cs.title }}</a>
+          </h3>
+
+          <p class="muted">{{ cs.summary }}</p>
+
+          <div class="tags">
+            {% for t in cs.tags %}
+              <span class="tag">{{ t }}</span>
+            {% endfor %}
+          </div>
+
+          <a class="work-card__cta" href="/{{ cs.slug }}/">
+            View case study →
+          </a>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="work-heroes js-fade" aria-label="Selected projects">
+
+	<div class="work-heroes-grid">
+
+		<!-- Project 1 -->
+		<a class="work-hero" href="/work/crosby/">
+		  <span class="work-hero__media">
+			<img src="/assets/images/crosby.png" alt="Crosby project preview">
+		  </span>
+		  <span class="work-hero__overlay"></span>
+		  <span class="work-hero__content">
+			<span class="work-hero__title">Crosby</span>
+			<span class="work-hero__desc">
+			  Revolutionizing retail with a modernized POS experience.
+			</span>
+		  </span>
+		</a>
+
+		<!-- Project 2 -->
+		<a class="work-hero" href="/work/project-two/">
+		  <span class="work-hero__media">
+			<img src="/assets/images/project-two.png" alt="Project Two preview">
+		  </span>
+		  <span class="work-hero__overlay"></span>
+		  <span class="work-hero__content">
+			<span class="work-hero__title">Project Two</span>
+			<span class="work-hero__desc">
+			  UX strategy and flow redesign for a digital product.
+			</span>
+		  </span>
+		</a>
+
+  </div>
+</section>
+
+
+
+
+
+{% endblock %}

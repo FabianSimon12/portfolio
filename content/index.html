@@ -1,0 +1,122 @@
+{% extends "_layout.html" %}
+{% set page = "work" %}
+
+{% block title %}Work · Arefeh{% endblock %}
+
+{% block content %}
+  <section class="work work--page" aria-label="Selected work">
+    <div class="container">
+
+      <header class="work-page-head js-fade">
+        <div class="bigtype bigtype--tight">SELECTED</div>
+        <div class="bigtype bigtype--tight">WORK</div>
+
+        <div class="work-page-sub js-fade">
+          <div class="muted">
+            A curated set of case studies with decisions, evidence, and outcomes.
+          </div>
+        </div>
+      </header>
+
+      {# OPTIONAL FILTERS
+         - If you don't want filters, delete this whole block.
+         - It uses tags already present in each case_study. #}
+      {% set all_tags = [] %}
+      {% for cs in case_studies %}
+        {% for t in cs.tags %}
+          {% if t not in all_tags %}
+            {% set all_tags = all_tags + [t] %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+
+      <div class="work-filters js-fade" role="tablist" aria-label="Work filters">
+        <button class="filter-pill is-active" type="button" data-filter="all" role="tab" aria-selected="true">
+          All
+        </button>
+        {% for t in all_tags %}
+          <button class="filter-pill" type="button" data-filter="{{ t | lower | replace(' ', '-') }}" role="tab" aria-selected="false">
+            {{ t }}
+          </button>
+        {% endfor %}
+      </div>
+
+      <div class="grid js-fade" id="workGrid">
+        {% for cs in case_studies %}
+          {# turn tags into data attributes for filtering #}
+          {% set tag_tokens = [] %}
+          {% for t in cs.tags %}
+            {% set tag_tokens = tag_tokens + [t | lower | replace(' ', '-')] %}
+          {% endfor %}
+
+          <article class="work-card" data-tags="{{ tag_tokens | join(' ') }}">
+            <div class="work-card__meta">
+              <div class="pill">{{ cs.year }}</div>
+              <div class="pill pill--ghost">{{ cs.role }}</div>
+              {% if cs.status and cs.status != "Public" %}
+                <div class="pill pill--warn">{{ cs.status }}</div>
+              {% endif %}
+            </div>
+
+            <h3 class="work-card__title">
+              <a href="/{{ cs.slug }}/">{{ cs.title }}</a>
+            </h3>
+
+            <p class="muted">{{ cs.summary }}</p>
+
+            <div class="tags">
+              {% for t in cs.tags %}
+                <span class="tag">{{ t }}</span>
+              {% endfor %}
+            </div>
+
+            <a class="work-card__cta" href="/{{ cs.slug }}/">
+              View case study →
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+
+      <div class="work-page-footer js-fade">
+        <div class="muted">
+          Want to collaborate or have a project in mind?
+        </div>
+        <a class="button" href="/#content">Let’s connect →</a>
+      </div>
+    </div>
+  </section>
+
+  {# Optional filtering JS (safe: page still works without it) #}
+  <script>
+    (function () {
+      const pills = document.querySelectorAll(".filter-pill");
+      const cards = document.querySelectorAll(".work-card");
+      if (!pills.length || !cards.length) return;
+
+      function setActive(btn) {
+        pills.forEach(p => {
+          p.classList.remove("is-active");
+          p.setAttribute("aria-selected", "false");
+        });
+        btn.classList.add("is-active");
+        btn.setAttribute("aria-selected", "true");
+      }
+
+      function applyFilter(token) {
+        cards.forEach(card => {
+          const tags = (card.getAttribute("data-tags") || "").split(" ");
+          const show = token === "all" || tags.includes(token);
+          card.style.display = show ? "" : "none";
+        });
+      }
+
+      pills.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const token = btn.dataset.filter;
+          setActive(btn);
+          applyFilter(token);
+        });
+      });
+    })();
+  </script>
+{% endblock %}

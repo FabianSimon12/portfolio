@@ -1,0 +1,187 @@
+{% extends "_layout.html" %}
+{% set page = "home" %}
+
+{% block title %}Arefeh{% endblock %}
+
+{% block content %}
+  <!-- HERO (no fade needed unless you want it) -->
+  <section class="hero hero--minimal" aria-label="Intro">
+    <div class="container hero-min">
+      <div class="hero-min__title">
+        <div class="bigtype">UX/Graphic</div>
+        <div class="bigtype">DESIGNER</div>
+      </div>
+
+      <div class="hero-min__meta">
+        <div class="meta-left">
+          <div class="meta-kicker">CURRENTLY CRAFTING</div>
+          <div class="meta-value">EXPERIENCES AT CROSBY</div>
+        </div>
+        <div class="meta-right">
+          <div class="meta-value">(2025 — PRESENT)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO (fade the section; hover lives on .img-frame) -->
+  <section class="photo js-fade" aria-label="Featured photo">
+    <div class="container">
+		<figure class="photo-card js-fade">
+        <span class="img-frame img-frame--hero">
+          <img src="/assets/images/portrait.png" alt="Portrait of Arefeh" loading="lazy" />
+        </span>
+        {# <figcaption class="muted">A short caption if you want.</figcaption> #}
+      </figure>
+    </div>
+  </section>
+  
+    <!-- STATEMENT -->
+  <section class="statement js-fade js-fade--blink" aria-label="Statement">
+    <div class="container">
+      <h2 class="statement-text">
+        I’m passionate about turning ideas into beautiful,<br />
+        practical designs that solve real problems for great people<br />
+        — like you.
+      </h2>
+    </div>
+  </section>
+  
+    <!-- PROCESS -->
+  <section class="process js-fade" aria-label="Process">
+    <div class="container">
+      <div class="process-grid">
+        <article class="process-item">
+          <div class="process-num">(01)</div>
+          <h3 class="process-title">Discovery</h3>
+          <p class="process-desc">
+            The first part of my process is about learning all about your industry.
+          </p>
+        </article>
+
+        <article class="process-item">
+          <div class="process-num">(02)</div>
+          <h3 class="process-title">Strategy</h3>
+          <p class="process-desc">
+            Next, we’ll map an approach to meet your business’s design objectives.
+          </p>
+        </article>
+
+        <article class="process-item">
+          <div class="process-num">(03)</div>
+          <h3 class="process-title">Wireframe</h3>
+          <p class="process-desc">
+            Depending on complexity, I’ll create wireframes to get alignment on the strategic direction,
+            interactions, and the functional requirements.
+          </p>
+        </article>
+
+        <article class="process-item">
+          <div class="process-num">(04)</div>
+          <h3 class="process-title">Design</h3>
+          <p class="process-desc">
+            I’ll explore the art direction and animation for the experience, ensuring it aligns with your
+            target audience and brand personality.
+          </p>
+        </article>
+
+        <article class="process-item">
+          <div class="process-num">(05)</div>
+          <h3 class="process-title">Build</h3>
+          <p class="process-desc">
+            Once the designs are finalized, I’ll partner with a creative developer to bring the vision to reality.
+          </p>
+        </article>
+
+        <article class="process-item">
+          <div class="process-num">(06)</div>
+          <h3 class="process-title">Deliver</h3>
+          <p class="process-desc">
+            Lastly, I’ll compile and send the project assets and guidelines to you. On time and on budget.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- RELEVANT EXPERIENCE
+       IMPORTANT: remove js-fade from the parent section to avoid “double fade”
+       (each row fades individually) -->
+  <section class="xp" aria-label="Relevant experience">
+    <div class="container">
+      <div class="xp-head js-fade">
+        <div class="bigtype bigtype--tight">RELEVANT</div>
+        <div class="bigtype bigtype--tight">EXPERIENCE</div>
+      </div>
+
+      <div class="xp-list">
+        {% for item in site.experience %}
+          <article class="xp-row js-fade">
+            <div class="xp-company-wrap">
+              <div class="xp-company">{{ item.company }}</div>
+            </div>
+
+            <div class="xp-meta">
+              <div class="xp-title">{{ item.title | upper }}</div>
+              <div class="xp-summary">{{ item.summary }}</div>
+            </div>
+
+            <div class="xp-years">({{ item.years }})</div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+
+	<!-- PDF PREVIEW -->
+	<section class="pdf-preview js-fade" aria-label="Resume preview">
+	  <div class="container">
+		<button class="pdf-card pdf-card--compact" id="pdfCard" type="button" aria-label="Open resume">
+		  <div class="pdf-meta">
+			<div class="pdf-kicker">RESUME</div>
+			<h3 class="pdf-title">Arefeh Ghadirinasab — CV</h3>
+			<div class="muted">Click to expand</div>
+		  </div>
+
+		  <!-- Clean preview image (no toolbar) -->
+		  <div class="pdf-thumb">
+			<img
+			  src="/assets/pdf/Arefeh_Ghadirinasab_CV_preview.png"
+			  alt="Resume preview"
+			  loading="lazy"
+			/>
+		  </div>
+		</button>
+	  </div>
+	</section>
+	
+	<!-- PDF OVERLAY -->
+	<div class="pdf-overlay" id="pdfOverlay" aria-hidden="true">
+	  <div class="pdf-overlay-inner">
+		<button class="pdf-close" aria-label="Close resume preview">×</button>
+
+		<iframe
+		  src="/assets/pdf/Arefeh_Ghadirinasab_CV.pdf"
+		  class="pdf-overlay-frame"
+		  title="Resume full view">
+		</iframe>
+	  </div>
+	</div>
+
+
+
+  {# Optional: tiny helper JS to “Back to top” smooth scroll if you want #}
+  <script>
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-scroll-top]");
+      if (!btn) return;
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      history.replaceState(null, "", "/");
+    });
+  </script>
+{% endblock %}

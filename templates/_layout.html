@@ -1,0 +1,227 @@
+{# ===========================
+   _layout.html (base template)
+   ABOUT = homepage (/)
+   WORK  = /work/ (Selected work page)
+   Selected projects in footer come from site.selected_work (set in build.py)
+   =========================== #}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <title>{% block title %}Arefeh{% endblock %}</title>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <!-- HEADER -->
+    <header class="site-header--ref" aria-label="Header">
+      <div class="container">
+        <div class="header-row--ref">
+          <a class="brand--ref" href="/">
+            <span class="brand__name--ref">AREFEH GHADIRINASAB</span>
+          </a>
+
+          <nav class="nav--ref" aria-label="Primary">
+            <!-- ABOUT = Home -->
+            <a class="nav__link--ref {% if page == 'home' %}is-active{% endif %}" href="/">ABOUT</a>
+
+            <!-- WORK = Selected Work page -->
+            <a class="nav__link--ref {% if page == 'work' %}is-active{% endif %}" href="/work/">WORK</a>
+          </nav>
+
+          <div class="header-right">
+            <div class="connect-label">LET'S CONNECT</div>
+
+            <div class="email-pill" role="group" aria-label="Email">
+              <span class="email-pill__text" id="headerEmail">{{ site.email }}</span>
+              <button class="email-pill__btn" type="button" aria-label="Copy email address" data-copy="#headerEmail">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path fill="currentColor"
+                    d="M16 1H6a2 2 0 0 0-2 2v10h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="site-main" id="content">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer--pro" aria-label="Footer">
+      <div class="container footer-pro">
+
+        <div class="footer-top">
+          <div class="footer-id">
+            <div class="footer-name">AREFEH GHADIRINASAB</div>
+            <div class="footer-bio">
+              Senior UX Designer, currently crafting<br/>
+              experiences at Crosby.
+            </div>
+          </div>
+
+          <div class="footer-cta">
+            <h2 class="footer-headline">
+              Think I’d be a good fit for your team or project?<br/>
+              <span class="footer-headline__strong">Let’s connect.</span>
+            </h2>
+
+            <div class="email-pill email-pill--footer" role="group" aria-label="Email">
+              <span class="email-pill__text" id="footerEmail">{{ site.email }}</span>
+              <button class="email-pill__btn" type="button" aria-label="Copy email address" data-copy="#footerEmail">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path fill="currentColor"
+                    d="M16 1H6a2 2 0 0 0-2 2v10h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-col">
+            <div class="footer-kicker">SELECTED PROJECTS</div>
+
+            <ul class="footer-list">
+              {% if site.selected_work %}
+                {% for w in site.selected_work %}
+                  <li><a class="footer-link" href="{{ w.url }}">{{ w.title }}</a></li>
+                {% endfor %}
+              {% else %}
+                <li class="muted">Add projects in build.py → site_context()["selected_work"]</li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <div class="footer-kicker">SOCIALS</div>
+            <ul class="footer-socials">
+              {% if site.links and site.links.LinkedIn %}
+                <li>
+                  <a class="footer-link"
+                     href="{{ site.links.LinkedIn }}"
+                     target="_blank"
+                     rel="noopener noreferrer">
+                    LinkedIn
+                  </a>
+                </li>
+              {% endif %}
+
+              {% if site.links and site.links.Instagram %}
+                <li>
+                  <a class="footer-link"
+                     href="{{ site.links.Instagram }}"
+                     target="_blank"
+                     rel="noopener noreferrer">
+                    Instagram
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-meta">
+          <div class="footer-meta__left">© 2026 Arefeh Ghadirinasab</div>
+          <div class="footer-meta__right">
+            <a class="footer-link footer-link--muted" href="/">About</a>
+            <span class="footer-dot">•</span>
+            <a class="footer-link footer-link--muted" href="/work/">Work</a>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+
+    <!-- JS: fade-in on scroll + copy email -->
+    <script>
+      // Enable JS-only styles for fades
+      document.documentElement.classList.add("js-enabled");
+
+      // Fade-in observer
+      const els = document.querySelectorAll(".js-fade");
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-visible");
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.12 }
+      );
+      els.forEach((el) => io.observe(el));
+
+      // Copy-to-clipboard (works for header + footer)
+      document.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-copy]");
+        if (!btn) return;
+
+        const target = document.querySelector(btn.dataset.copy);
+        if (!target) return;
+
+        const text = target.textContent.trim();
+
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.classList.add("is-copied");
+          setTimeout(() => btn.classList.remove("is-copied"), 1200);
+        } catch (_) {}
+      });
+    </script>
+
+    <!-- Optional: ABOUT refreshes page if already on homepage -->
+    <script>
+      document.addEventListener("click", (e) => {
+        const link = e.target.closest('a[href="/"]');
+        if (!link) return;
+
+        const isHome =
+          window.location.pathname === "/" ||
+          window.location.pathname.endsWith("/index.html");
+
+        if (!isHome) return; // normal navigation from other pages
+
+        e.preventDefault();
+        window.location.reload();
+      });
+    </script>
+
+	<script>
+	  const pdfCard = document.getElementById("pdfCard");
+	  const pdfOverlay = document.getElementById("pdfOverlay");
+	  const pdfClose = pdfOverlay?.querySelector(".pdf-close");
+
+	  if (pdfCard && pdfOverlay) {
+		pdfCard.addEventListener("click", () => {
+		  pdfOverlay.classList.add("is-open");
+		  pdfOverlay.setAttribute("aria-hidden", "false");
+		});
+
+		pdfClose.addEventListener("click", () => {
+		  pdfOverlay.classList.remove("is-open");
+		  pdfOverlay.setAttribute("aria-hidden", "true");
+		});
+
+		pdfOverlay.addEventListener("click", (e) => {
+		  if (e.target === pdfOverlay) {
+			pdfOverlay.classList.remove("is-open");
+			pdfOverlay.setAttribute("aria-hidden", "true");
+		  }
+		});
+	  }
+	</script>
+
+
+    <script src="/assets/js/main.js" defer></script>
+  </body>
+</html>
